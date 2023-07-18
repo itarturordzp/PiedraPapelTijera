@@ -1,6 +1,6 @@
-const ROCK = 0;
-      PAPER = 1;
-      SCISSORS = 2;
+const ROCK = "Piedra";
+      PAPER = "Papel";
+      SCISSORS = "Tijera";
       
 const TIE = 0;
       WIN = 1;
@@ -9,6 +9,9 @@ const TIE = 0;
 const rockBtn = document.getElementById("rock");
 const paperBtn = document.getElementById("paper");
 const scissorsBtn = document.getElementById("scissors");
+const resultText = document.getElementById("start-text");
+const userImg = document.getElementById("user-img");
+const machineImg = document.getElementById("machine-img");
 
 
 rockBtn.addEventListener("click" , ()=>{
@@ -36,23 +39,55 @@ scissorsBtn.addEventListener("click", ()=>{
 });
 
 function play(userOption){
-    const machineOption = Math.floor(Math.random() * 3);
-    const result = calcResult(userOption,machineOption);
+    userImg.src= "img/"+userOption+".png";
 
-    switch(result){
-        case TIE:
-            alert(machineOption + "Empate");
-            break;
-            case WIN:
-                alert(machineOption + "Ganaste");
+    resultText.innerHTML = "Escogiendo";
+
+    const interval = setInterval(function (){
+        const machineOption = calcMachineOption();
+        machineImg.src= "img/"+machineOption+".png";
+    },200);
+
+    setTimeout(function(){
+
+        clearInterval(interval);
+
+        const machineOption = calcMachineOption();
+        const result = calcResult(userOption,machineOption);
+        
+      
+        machineImg.src= "img/"+machineOption+".png";
+    
+        switch(result){
+            case TIE:
+                resultText.innerHTML = "Empataste";
                 break;
-                case LOST:
-                    alert(machineOption + "Perdiste");
+                case WIN:
+                    resultText.innerHTML="Ganaste";
                     break;
+                    case LOST:
+                        resultText.innerHTML= "Perdiste";
+                        break;
+    
+        }
 
-    }
+    },3000);
+   
 
     
+}
+
+function calcMachineOption(){
+    const number = Math.floor(Math.random()*3 );
+    switch(number){
+        case 0:
+            return ROCK;
+            case 1: 
+            return PAPER;
+            case 2:
+                return SCISSORS;
+    }
+
 }
 
 function calcResult(userOption,machineOption){
